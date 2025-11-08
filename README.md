@@ -1,2 +1,18 @@
-# ask4-n8n-PostgreSQL-Docker-Setup
-This repository contains the Docker Compose setup for running n8n (workflow automation tool) with PostgreSQL as its database. It demonstrates how to configure and connect multiple containers using Docker Compose, set environment variables for persistence, and expose n8n on port 5678 for web access
+# Task 4: n8n + PostgreSQL with Docker Compose
+
+This setup runs a persistent n8n (workflow automation) instance alongside a PostgreSQL database using Docker Compose.
+
+## 🚀 How to Run
+
+1.  Make sure you have Docker and Docker Compose installed.
+2.  Clone this repository (or just use this folder).
+3.  From the `Task4` directory, run:
+    ```sh
+    docker compose up -d
+    ```
+4.  The services will start in the background.
+
+## ✅ Accessing the Service
+
+Once running, you can access the n8n dashboard in your browser at:
+**[http://localhost:5678](http://localhost:5678)**

@@ -1,0 +1,52 @@
+# This is the content for your docker-compose.yml file
+
+version: "3.8"
+
+services:
+  # Service 1: PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      # 4. Set up environment variables for PostgreSQL
+      POSTGRES_USER: n8nuser
+      POSTGRES_PASSWORD: n8npassword
+      POSTGRES_DB: n8n_db
+    volumes:
+      # This volume persists the database data
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - n8n-network
+
+  # Service 2: n8n Workflow Tool
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    ports:
+      # 4. Expose n8n on port 5678
+      - "5678:5678"
+    environment:
+      # 4. Link the n8n container to postgres
+      # These variables tell n8n how to find and log into the postgres service
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres # 'postgres' is the service name from above
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8n_db # Must match POSTGRES_DB
+      DB_POSTGRESDB_USER: n8nuser # Must match POSTGRES_USER
+      DB_POSTGRESDB_PASSWORD: n8npassword # Must match POSTGRES_PASSWORD
+    volumes:
+      # This volume persists n8n's own data (like your workflows)
+      - n8ndata:/home/node/.n8n
+    networks:
+      - n8n-network
+    # This ensures postgres is started before n8n attempts to connect
+    depends_on:
+      - postgres
+
+# Define the volumes and network
+volumes:
+  pgdata:
+  n8ndata:
+
+networks:
+  n8n-network:
